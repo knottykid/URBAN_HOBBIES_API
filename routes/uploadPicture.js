@@ -1,9 +1,4 @@
 const router = require("express").Router();
-const authRoutes = require("./auth");
-const userRoutes = require("./user");
-const profileRoutes = require("./profile");
-const hobbiesRoutes = require("./hobbies");
-// const uploadPictureRoutes = require("./uploadPicture");
 const User = require("../models/User.model");
 
 const upload = require("../middleware/cloudinary");
@@ -26,14 +21,5 @@ router.post(
       });
   }
 );
-/* GET home page */
-router.get("/", (req, res, next) => {
-  res.json("All good in here");
-});
 
-router.use("/auth", authRoutes);
-router.use("/user", userRoutes);
-router.use("/profile", profileRoutes);
-router.use("/hobbies", hobbiesRoutes);
-// router.use("/uploadPicture/:id", uploadPictureRoutes);
 module.exports = router;

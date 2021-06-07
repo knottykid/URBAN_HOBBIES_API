@@ -1,13 +1,23 @@
 const { Schema, model } = require("mongoose");
+const NEIGHBORHOOD_ENUM = require("../utils/hoods");
 
-// TODO: Please make sure you edit the user model to whatever makes sense in this case
 const userSchema = new Schema(
   {
-    username: {
+    // name: { type: String, required: true },
+    username: { type: String, required: true },
+    // email: { type: String, required: true },
+    password: { type: String, required: true },
+    profilePic: {
       type: String,
-      // unique: true -> Ideally, should be unique, but its up to you
+      default:
+        "https://res.cloudinary.com/dzxo1mr9i/image/upload/v1623014144/user-silhouette_giarjw.png",
     },
-    password: String,
+    contacts: [{ type: Schema.Types.ObjectId, ref: "User" }],
+    hobbies: [{ type: Schema.Types.ObjectId, ref: "Hobbies" }],
+    location: String,
+    coords: [String],
+    neighborhood: { type: String, enum: NEIGHBORHOOD_ENUM },
+    postalCode: { type: [Number] },
   },
   {
     timestamps: true,

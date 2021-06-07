@@ -5,7 +5,7 @@ const HobbiesSchema = new Schema({
   name: String,
   image: String,
   location: String,
-  description: String,
+  description: { type: String, required: true },
   coords: [String],
   neighborhood: { type: String, enum: NEIGHBORHOOD_ENUM },
   postalCode: { type: [Number] },
