@@ -35,7 +35,11 @@ router.get("/session", (req, res) => {
 });
 
 router.post("/signup", isLoggedOut, (req, res) => {
-  const { username, password } = req.body;
+  const { name, username, email, password } = req.body;
+
+  // if (!name) {
+  //   return res.status(400).json({ errorMessage: "Please provide your name." });
+  // }
 
   if (!username) {
     return res
@@ -48,6 +52,10 @@ router.post("/signup", isLoggedOut, (req, res) => {
       errorMessage: "Your password needs to be at least 8 characters long.",
     });
   }
+
+  // if (!email) {
+  //   return res.status(400).json({ errorMessage: "Please provide your email." });
+  // }
 
   //   ! This use case is using a regular expression to control for special characters and min length
   /*
@@ -75,7 +83,9 @@ router.post("/signup", isLoggedOut, (req, res) => {
       .then((hashedPassword) => {
         // Create a user and save it in the database
         return User.create({
+          name,
           username,
+          email,
           password: hashedPassword,
         });
       })
