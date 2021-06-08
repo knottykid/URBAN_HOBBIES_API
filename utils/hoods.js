@@ -1,6 +1,6 @@
 const NEIGHBORHOOD_ENUM = [
   "Charlottenburg-Wilmersdorf",
-  "Friedrichshain-Kreuzberconst Ng",
+  "Friedrichshain-Kreuzberg",
   "Lichtenberg",
   "Marzahn-Hellersdorf",
   "Mitte",

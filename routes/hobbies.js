@@ -11,13 +11,14 @@ router.get("/", (req, res) => {
 
 router.get("/:hobbyId", (req, res) => {
   Hobbies.findById(req.params.hobbyId)
-    .populate("location")
-    .populate("members")
-    .populate("hobbies")
-    .populate("description")
-    .populate("neighborhood")
     .then((hobby) => {
       res.json(hobby);
+    })
+    .catch((err) => {
+      console.log(
+        "Something went wrong getting the info on a hobbie! -> ",
+        err
+      );
     });
 });
 
