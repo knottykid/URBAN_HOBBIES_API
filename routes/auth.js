@@ -35,13 +35,13 @@ router.get("/session", (req, res) => {
 });
 
 router.post("/signup", isLoggedOut, (req, res) => {
-  const { name, username, email, password } = req.body;
+  const { firstName, lastName, username, email, password } = req.body;
 
   // if (!name) {
   //   return res.status(400).json({ errorMessage: "Please provide your name." });
   // }
 
-  if (!username) {
+  if (!username || !email || !firstName || !lastName || !password) {
     return res
       .status(400)
       .json({ errorMessage: "Please provide your username." });
@@ -70,10 +70,12 @@ router.post("/signup", isLoggedOut, (req, res) => {
   */
 
   // Search the database for a user with the username submitted in the form
-  User.findOne({ username }).then((found) => {
+  User.findOne({
+    $or: [{ username }, { email }],
+  }).then((found) => {
     // If the user is found, send the message username is taken
     if (found) {
-      return res.status(400).json({ errorMessage: "Username already taken." });
+      return res.status(400).json({ errorMessage: "Already taken." });
     }
 
     // if user is not found, create a new user - start with hashing the password
@@ -83,7 +85,7 @@ router.post("/signup", isLoggedOut, (req, res) => {
       .then((hashedPassword) => {
         // Create a user and save it in the database
         return User.create({
-          name,
+          name: `${firstName} ${lastName}`,
           username,
           email,
           password: hashedPassword,

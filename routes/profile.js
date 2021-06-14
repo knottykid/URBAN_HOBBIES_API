@@ -3,40 +3,49 @@ const User = require("../models/User.model");
 const isLoggedIn = require("../middleware/isLoggedIn");
 // const upload = require("../middleware/cloudinary");
 
-router.post("/profile", isLoggedIn, (req, res) => {
-  const { fullName, email, age, postalCode, gender, neighborhood } = req.body;
+// router.post("/profile", isLoggedIn, (req, res) => {
+//   const { fullName, email, age, postalCode, gender, neighborhood, hobbies } =
+//     req.body;
 
-  if (!fullName || !email || !age || !postalCode || !gender || !neighborhood) {
-    return res
-      .status(400)
-      .json({ errorMessage: "you need to complete the form before submit" });
-  }
+//   if (
+//     !fullName ||
+//     !email ||
+//     !age ||
+//     !postalCode ||
+//     !gender ||
+//     !neighborhood ||
+//     !hobbies
+//   ) {
+//     return res
+//       .status(400)
+//       .json({ errorMessage: "you need to complete the form before submit" });
+//   }
 
-  User.create({
-    fullName,
-    email,
-    age,
-    postalCode,
-    gender,
-    neighborhood,
-    user: req.user_id,
-  }).then((goodUser) => {
-    User.findByIdAndUpdate(
-      req.user._id,
-      {
-        $addToSet: { newValues: goodUser._id },
-      },
-      { new: true }
-    ).then((superUser) => {
-      res.json({ message: "you did it!", user: superUser });
-    });
-  });
-});
+//   User.create({
+//     // fullName,
+//     // email,
+//     // age,
+//     // postalCode,
+//     // gender,
+//     // neighborhood,
+//     // user: req.user_id,
+//   }).then((goodUser) => {
+//     User.findByIdAndUpdate(
+//       req.user._id,
+//       {
+//         $addToSet: { newValues: goodUser._id },
+//       },
+//       { new: true }
+//     ).then((superUser) => {
+//       res.json({ message: "you did it!", user: superUser });
+//     });
+//   });
+// });
 
 router.put(`/update`, isLoggedIn, (req, res) => {
   // router.put(`/update`, (req, res) => {
 
-  const { username, email } = req.body;
+  const { username, age, gender, neighborhood, postalCode, hobbies } = req.body;
 
   // if (username.length < 8) {
   //   // deal with it
@@ -45,7 +54,16 @@ router.put(`/update`, isLoggedIn, (req, res) => {
   // if (email.length < 8) {
   //   // deal with this
   // }
-  User.find({ $or: [{ username }, { email }] }).then((allUsers) => {
+  User.find({
+    $or: [
+      { username },
+      { postalCode },
+      { age },
+      { gender },
+      { neighborhood },
+      { hobbies },
+    ],
+  }).then((allUsers) => {
     const allNotMe = allUsers.filter(
       (eachUser) => eachUser._id.toString() !== req.user._id.toString()
     );
@@ -55,7 +73,7 @@ router.put(`/update`, isLoggedIn, (req, res) => {
 
     User.findByIdAndUpdate(
       req.user._id,
-      { email, username },
+      { username, postalCode, age, gender, neighborhood, hobbies },
       { new: true }
     ).then((newFabulousUser) => {
       res.json({ user: newFabulousUser });
