@@ -9,8 +9,8 @@ const HobbiesSchema = new Schema({
   coords: [String],
   neighborhood: { type: String, enum: NEIGHBORHOOD_ENUM },
   postalCode: { type: [Number] },
-  createdBy: { type: Schema.Types.ObjectId, ref: "User" }, //! Whenever we need this info in the frontend, we need to populate it first!
-  members: [{ type: Schema.Types.ObjectId, ref: "User" }],
+  // createdBy: { type: Schema.Types.ObjectId, ref: "User" }, //! Whenever we need this info in the frontend, we need to populate it first!
+  // members: [{ type: Schema.Types.ObjectId, ref: "User" }],
 });
 
 const Hobbies = model("Hobbies", HobbiesSchema);

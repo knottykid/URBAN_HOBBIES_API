@@ -21,7 +21,6 @@ const userSchema = new Schema(
     age: { type: Number },
     hobbies: [String],
     gender: { type: String },
-    // hobbiesTest
   },
   {
     timestamps: true,

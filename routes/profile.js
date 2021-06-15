@@ -1,34 +1,18 @@
 const router = require("express").Router();
 const User = require("../models/User.model");
 const isLoggedIn = require("../middleware/isLoggedIn");
+const Hobbies = require("../models/Hobbies.model");
 // const upload = require("../middleware/cloudinary");
 
 // router.post("/profile", isLoggedIn, (req, res) => {
-//   const { fullName, email, age, postalCode, gender, neighborhood, hobbies } =
+//   const { hobbies } =
 //     req.body;
 
-//   if (
-//     !fullName ||
-//     !email ||
-//     !age ||
-//     !postalCode ||
-//     !gender ||
-//     !neighborhood ||
-//     !hobbies
-//   ) {
 //     return res
 //       .status(400)
 //       .json({ errorMessage: "you need to complete the form before submit" });
 //   }
 
-//   User.create({
-//     // fullName,
-//     // email,
-//     // age,
-//     // postalCode,
-//     // gender,
-//     // neighborhood,
-//     // user: req.user_id,
 //   }).then((goodUser) => {
 //     User.findByIdAndUpdate(
 //       req.user._id,
@@ -42,18 +26,18 @@ const isLoggedIn = require("../middleware/isLoggedIn");
 //   });
 // });
 
-router.put(`/update`, isLoggedIn, (req, res) => {
-  // router.put(`/update`, (req, res) => {
-
+router.put(`/update`, isLoggedIn, async (req, res) => {
   const { username, age, gender, neighborhood, postalCode, hobbies } = req.body;
+  console.log("HOBO:", hobbies);
 
-  // if (username.length < 8) {
-  //   // deal with it
-  // }
+  /*
+  const allHobbieIdPromise = hobbies.map(e => {Hobby.findOne({name: e})})
 
-  // if (email.length < 8) {
-  //   // deal with this
-  // }
+  const allHobbieIds = await Promise.all(allHobbieIdsPromise)
+
+  const ids = allHobbieIds.map(e => e._id)
+  */
+
   User.find({
     $or: [
       { username },
@@ -61,7 +45,7 @@ router.put(`/update`, isLoggedIn, (req, res) => {
       { age },
       { gender },
       { neighborhood },
-      { hobbies },
+      // { hobbies },
     ],
   }).then((allUsers) => {
     const allNotMe = allUsers.filter(
@@ -73,11 +57,23 @@ router.put(`/update`, isLoggedIn, (req, res) => {
 
     User.findByIdAndUpdate(
       req.user._id,
-      { username, postalCode, age, gender, neighborhood, hobbies },
+      {
+        username,
+        postalCode,
+        age,
+        gender,
+        neighborhood,
+        hobbies,
+      },
       { new: true }
-    ).then((newFabulousUser) => {
-      res.json({ user: newFabulousUser });
-    });
+    )
+      // .populate("hobbies")
+      .then((betterUser) => {
+        console.log("New Noise:", betterUser);
+
+        console.log("YOYOYOY:", typeof hobbies);
+        res.json({ user: betterUser });
+      });
   });
 });
 

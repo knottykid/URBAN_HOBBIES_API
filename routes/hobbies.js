@@ -18,21 +18,12 @@ router.get("/:hobbyId", async (req, res) => {
   } catch (error) {
     console.log("Something went wrong getting the info on a hobby! -> ", error);
   }
-
-  // .then((hobby) => {
-  //   res.json(hobby);
-  // })
-  // .catch((err) => {
-  //   console.log(
-  //     "Something went wrong getting the info on a hobbie! -> ",
-  //     err
-  //   );
-  // });
 });
 
 //create a new hobby
 router.post("/add", auth, async (req, res) => {
   const oldHobby = await Hobbies.findOne({ name: req.body.name });
+  console.log("oldHobby", oldHobby);
   try {
     if (oldHobby) {
       return (
