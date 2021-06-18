@@ -38,9 +38,10 @@ const HobbiesArr = [
   },
   {
     name: "Running",
-    location: "BerlinRun Lola Run ",
+    location: "Berlin ",
     image:
       "https://static.vecteezy.com/system/resources/previews/000/096/135/original/running-silhouette-vectors.jpg",
+    description: "Run Lola Run",
   },
   {
     name: "Yoga",
@@ -114,34 +115,34 @@ const HobbiesArr = [
 
   {
     name: "Foodie",
-    location:
-      "BerlinA foodie is a person who has an ardent or refined interest in food and who eats food not only out of hunger but due to their interest or hobby and is passionate about food. ",
+    location: "Berlin ",
     image:
       "https://signmax.us/AchatEnLigne/logos/Images/foodies-10-19-2016.jpg",
-    description: "",
+    description:
+      "A foodie is a person who has an ardent or refined interest in food and who eats food not only out of hunger but due to their interest or hobby and is passionate about food.",
   },
   {
     name: "Board Games",
-    location:
-      "BerlinBoard games are tabletop games that typically use pieces moved or placed on a pre-marked board and often include elements of table, card, role-playing, and miniatures games as well. Most feature a competition between two or more players.",
+    location: "Berlin",
     image: "https://cdn.onlinewebfonts.com/svg/img_561222.png",
-    description: "",
+    description:
+      "Board games are tabletop games that typically use pieces moved or placed on a pre-marked board and often include elements of table, card, role-playing, and miniatures games as well. Most feature a competition between two or more players.",
   },
   {
     name: "Gaming",
-    location:
-      "BerlinA gamer is a person who plays interactive games, especially video games, tabletop role-playing games, and skill-based card games, and who plays for usually long periods of time. ",
+    location: "Berlin",
     image:
       "https://www.creativefabrica.com/wp-content/uploads/2018/03/I-dont-get-older-I-level-up.jpg",
-    description: "",
+    description:
+      "A gamer is a person who plays interactive games, especially video games, tabletop role-playing games, and skill-based card games, and who plays for usually long periods of time. ",
   },
   {
     name: "Coding",
-    location:
-      "BerlinCoding is the process of using a programming language to get a computer to behave how you want it to.",
+    location: "Berlin",
     image:
       "https://upload.wikimedia.org/wikipedia/commons/thumb/5/57/Code.svg/1200px-Code.svg.png",
-    description: "",
+    description:
+      "Coding is the process of using a programming language to get a computer to behave how you want it to.",
   },
   {
     name: "Meditation",

@@ -32,7 +32,7 @@ router.get("/", (req, res, next) => {
 });
 
 router.use("/auth", authRoutes);
-router.use("/user", userRoutes);
+router.use("/users", userRoutes);
 router.use("/profile", profileRoutes);
 router.use("/hobbies", hobbiesRoutes);
 // router.use("/uploadPicture/:id", uploadPictureRoutes);
