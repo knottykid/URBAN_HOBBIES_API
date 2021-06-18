@@ -2,7 +2,23 @@ const router = require("express").Router();
 const User = require("../models/User.model");
 const isLoggedIn = require("../middleware/isLoggedIn");
 const Hobbies = require("../models/Hobbies.model");
+const Session = require("../models/Session.model");
 // const upload = require("../middleware/cloudinary");
+
+// router.get("/:userId", async (req, res) => {
+//   try {
+//     const dynamicUser = await User.findOne({ username: req.params.userId });
+//     // const dynamicUser = await User.findById(req.params.userId);
+//     if (!dynamicUser) {
+//       return res
+//         .status(404)
+//         .json({ errMessage: "User with this name does not exist" });
+//     }
+//     return res.json(dynamicUser);
+//   } catch (error) {
+//     console.log("oh oh", error);
+//   }
+// });
 
 // router.post("/profile", isLoggedIn, (req, res) => {
 //   const { hobbies } =
@@ -26,33 +42,22 @@ const Hobbies = require("../models/Hobbies.model");
 //   });
 // });
 
-router.put(`/update`, isLoggedIn, async (req, res) => {
+router.put(`/update`, isLoggedIn, (req, res) => {
   const { username, age, gender, neighborhood, postalCode, hobbies } = req.body;
-  console.log("HOBO:", hobbies);
 
   /*
   const allHobbieIdPromise = hobbies.map(e => {Hobby.findOne({name: e})})
-
   const allHobbieIds = await Promise.all(allHobbieIdsPromise)
-
   const ids = allHobbieIds.map(e => e._id)
   */
 
   User.find({
-    $or: [
-      { username },
-      { postalCode },
-      { age },
-      { gender },
-      { neighborhood },
-      // { hobbies },
-    ],
+    $or: [{ username }, { postalCode }, { age }, { gender }, { neighborhood }],
   }).then((allUsers) => {
     const allNotMe = allUsers.filter(
       (eachUser) => eachUser._id.toString() !== req.user._id.toString()
     );
     if (allNotMe.length) {
-      // OPPSIE, WE CAN'T UPDATE
     }
 
     User.findByIdAndUpdate(
@@ -66,15 +71,22 @@ router.put(`/update`, isLoggedIn, async (req, res) => {
         hobbies,
       },
       { new: true }
-    )
-      // .populate("hobbies")
-      .then((betterUser) => {
-        console.log("New Noise:", betterUser);
-
-        console.log("YOYOYOY:", typeof hobbies);
-        res.json({ user: betterUser });
-      });
+    ).then((betterUser) => {
+      res.json({ user: betterUser });
+    });
   });
+});
+
+router.delete("/delete", isLoggedIn, async (req, res) => {
+  try {
+    await Session.deleteMany({ user: req.user._id });
+
+    await User.findByIdAndDelete(req.user._id);
+    res.status(200).json(true);
+  } catch (error) {
+    console.log("HELLO", error);
+    res.status(500).json({ error });
+  }
 });
 
 module.exports = router;
