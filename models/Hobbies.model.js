@@ -6,11 +6,8 @@ const HobbiesSchema = new Schema({
   image: String,
   location: String,
   description: String,
-  coords: [String],
   neighborhood: { type: String, enum: NEIGHBORHOOD_ENUM },
   postalCode: { type: [Number] },
-  // createdBy: { type: Schema.Types.ObjectId, ref: "User" }, //! Whenever we need this info in the frontend, we need to populate it first!
-  // members: [{ type: Schema.Types.ObjectId, ref: "User" }],
 });
 
 const Hobbies = model("Hobbies", HobbiesSchema);

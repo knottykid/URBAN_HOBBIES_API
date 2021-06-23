@@ -12,10 +12,9 @@ const userSchema = new Schema(
       default:
         "https://res.cloudinary.com/dzxo1mr9i/image/upload/v1623014144/user-silhouette_giarjw.png",
     },
-    contacts: [{ type: Schema.Types.ObjectId, ref: "User" }],
-    // hobbies: [{ type: Schema.Types.ObjectId, ref: "Hobbies" }],
-    // location: String,
-    //coords: [String],
+    following: [{ type: Schema.Types.ObjectId, ref: "User" }],
+    followers: [{ type: Schema.Types.ObjectId, ref: "User" }],
+    location: { type: String, default: "Berlin" },
     neighborhood: { type: String, enum: NEIGHBORHOOD_ENUM },
     postalCode: { type: Number },
     age: { type: Number },
