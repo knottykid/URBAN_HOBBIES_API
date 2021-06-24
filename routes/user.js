@@ -39,18 +39,14 @@ router.put("/:userId/follow", isLoggedIn, async (req, res) => {
 
       { $addToSet: { following: user } },
       { new: true }
-    )
-      .populate("following")
-      .then((data) => {});
+    ).then((data) => {});
     User.findByIdAndUpdate(
       user,
       { $addToSet: { followers: currentUser } },
       { new: true }
-    )
-      .populate("followers")
-      .then((response) => {
-        return res.json(response);
-      });
+    ).then((response) => {
+      return res.json(response);
+    });
   } catch (err) {
     res.status(500).json(err);
   }
@@ -66,7 +62,7 @@ router.put("/:userId/unFollow", async (req, res) => {
       currentUser,
       { $pull: { following: user } },
       { new: true }
-    ).then((u) => {});
+    ).then((e) => {});
 
     User.findByIdAndUpdate(
       user,

@@ -16,7 +16,7 @@ const userSchema = new Schema(
     followers: [{ type: Schema.Types.ObjectId, ref: "User" }],
     location: { type: String, default: "Berlin" },
     neighborhood: { type: String, enum: NEIGHBORHOOD_ENUM },
-    postalCode: { type: Number },
+    postalCode: { type: String },
     age: { type: Number },
     hobbies: [String],
     gender: { type: String },
