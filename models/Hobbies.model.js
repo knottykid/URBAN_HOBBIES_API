@@ -6,8 +6,8 @@ const HobbiesSchema = new Schema({
   image: String,
   location: String,
   description: String,
-  neighborhood: { type: String, enum: NEIGHBORHOOD_ENUM },
-  postalCode: { type: [Number] },
+  // neighborhood: { type: String, enum: NEIGHBORHOOD_ENUM },
+  // postalCode: { type: [Number] },
 });
 
 const Hobbies = model("Hobbies", HobbiesSchema);

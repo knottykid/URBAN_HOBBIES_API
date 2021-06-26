@@ -71,7 +71,7 @@ router.put("/:userId/unFollow", async (req, res) => {
     ).then((u) => {
       return res.json(u);
     });
-    return res.status(200).json("user has been unFollowed");
+    // return res.status(200).json("user has been unFollowed");
     // } else {
     //   res.status(403).json("you don't follow this user");
     // }

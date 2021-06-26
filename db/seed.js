@@ -114,7 +114,7 @@ const HobbiesArr = [
   },
 
   {
-    name: "Foodie",
+    name: "Foodies",
     location: "Berlin ",
     image:
       "https://signmax.us/AchatEnLigne/logos/Images/foodies-10-19-2016.jpg",
