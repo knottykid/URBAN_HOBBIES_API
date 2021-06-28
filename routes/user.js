@@ -36,7 +36,6 @@ router.put("/:userId/follow", isLoggedIn, async (req, res) => {
 
     User.findByIdAndUpdate(
       currentUser,
-
       { $addToSet: { following: user } },
       { new: true }
     ).then((data) => {});
@@ -57,20 +56,28 @@ router.put("/:userId/unFollow", async (req, res) => {
   try {
     const user = await User.findById(req.params.userId);
     const currentUser = await User.findById(req.body.user._id);
-
-    User.findByIdAndUpdate(
-      currentUser,
-      { $pull: { following: user } },
-      { new: true }
-    ).then((e) => {});
-
-    User.findByIdAndUpdate(
-      user,
-      { $pull: { followers: currentUser } },
-      { new: true }
-    ).then((u) => {
-      return res.json(u);
-    });
+    console.log("YES", user);
+    console.log("NO", currentUser);
+    if (currentUser.followers > 0) {
+      User.findByIdAndUpdate(
+        user,
+        { $pull: { followers: currentUser } },
+        { new: true }
+      ).then((u) => {
+        console.log("Como Te LLAMAs?", u);
+        return res.json(u);
+      });
+    }
+    if (user.following > 0) {
+      User.findByIdAndUpdate(
+        currentUser,
+        { $pull: { following: user } },
+        { new: true }
+      ).then((e) => {
+        console.log("Quien ERES?", e);
+        return res.json(e);
+      });
+    }
     // return res.status(200).json("user has been unFollowed");
     // } else {
     //   res.status(403).json("you don't follow this user");
