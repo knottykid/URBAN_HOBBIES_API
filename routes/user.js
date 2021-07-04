@@ -28,63 +28,102 @@ router.get("/:userId", isLoggedIn, async (req, res) => {
 //follow a user
 
 router.put("/:userId/follow", isLoggedIn, async (req, res) => {
-  try {
-    const user = await User.findById(req.params.userId);
-    console.log("!!", user);
-    const currentUser = await User.findById(req.body.user._id);
-    console.log("??", currentUser);
+  const user = await User.findById(req.params.userId);
+  console.log("!!", user);
+  const currentUser = await User.findById(req.body.user._id);
+  console.log("??", currentUser);
 
-    User.findByIdAndUpdate(
-      currentUser,
-      { $addToSet: { following: user } },
-      { new: true }
-    ).then((data) => {});
-    User.findByIdAndUpdate(
-      user,
-      { $addToSet: { followers: currentUser } },
-      { new: true }
-    ).then((response) => {
-      return res.json(response);
-    });
-  } catch (err) {
-    res.status(500).json(err);
-  }
+  User.findByIdAndUpdate(
+    currentUser,
+    { $addToSet: { following: user } },
+    { new: true },
+    (err, result) => {
+      if (err) {
+        return res.status(500).json({ error: err });
+      }
+      User.findByIdAndUpdate(
+        user,
+        { $addToSet: { followers: currentUser } },
+        { new: true }
+      )
+        .then((response) => {
+          return res.json(response);
+        })
+        .catch((err) => {
+          return res.status(500).json({ error: err });
+        });
+    }
+  );
 });
 
 //unFollow the user
-router.put("/:userId/unFollow", async (req, res) => {
-  try {
-    const user = await User.findById(req.params.userId);
-    const currentUser = await User.findById(req.body.user._id);
-    console.log("YES", user);
-    console.log("NO", currentUser);
-    if (currentUser.followers > 0) {
-      User.findByIdAndUpdate(
-        user,
-        { $pull: { followers: currentUser } },
-        { new: true }
-      ).then((u) => {
-        console.log("Como Te LLAMAs?", u);
-        return res.json(u);
-      });
-    }
-    if (user.following > 0) {
+router.put("/unFollow", isLoggedIn, async (req, res) => {
+  const user = await User.findById(req.params.userId);
+  console.log("3", user);
+  const currentUser = await User.findById(req.body.user._id);
+  console.log("6", currentUser);
+  User.findByIdAndUpdate(
+    user,
+    {
+      $pull: { Followers: currentUser },
+    },
+    {
+      new: true,
+    },
+    (err, result) => {
+      if (err) {
+        return res.status(500).json({ error: err });
+      }
       User.findByIdAndUpdate(
         currentUser,
-        { $pull: { following: user } },
+        {
+          $pull: { Following: user },
+        },
         { new: true }
-      ).then((e) => {
-        console.log("Quien ERES?", e);
-        return res.json(e);
-      });
+      )
+        .then((result) => {
+          res.json(result);
+        })
+        .catch((err) => {
+          return res.status(500).json({ error: err });
+        });
     }
-    // return res.status(200).json("user has been unFollowed");
-    // } else {
-    //   res.status(403).json("you don't follow this user");
-    // }
-  } catch (err) {
-    res.status(500).json(err);
-  }
+  );
 });
+
+// router.put("/:userId/unFollow", async (req, res) => {
+//   try {
+//     const user = await User.findById(req.params.userId);
+//     const currentUser = await User.findById(req.body.user._id);
+//     console.log("YES", user);
+//     console.log("NO", currentUser);
+//     if (currentUser.followers > 0) {
+//       User.findByIdAndUpdate(
+//         user,
+//         { $pull: { followers: currentUser } },
+//         { new: true }
+//       ).then((u) => {
+//         console.log("Como Te LLAMAs?", u);
+//         return res.json(u);
+//       });
+//     }
+//     if (user.following > 0) {
+//       User.findByIdAndUpdate(
+//         currentUser,
+//         { $pull: { following: user } },
+//         { new: true }
+//       ).then((e) => {
+//         console.log("Quien ERES?", e);
+//         return res.json(e);
+//       });
+//     }
+//     // return res.status(200).json("user has been unFollowed");
+//     // } else {
+//     //   res.status(403).json("you don't follow this user");
+//     // }
+//   } catch (err) {
+//     res.status(500).json(err);
+//   }
+// });
 
 module.exports = router;
