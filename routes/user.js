@@ -29,9 +29,8 @@ router.get("/:userId", isLoggedIn, async (req, res) => {
 
 router.put("/:userId/follow", isLoggedIn, async (req, res) => {
   const user = await User.findById(req.params.userId);
-  console.log("!!", user);
+
   const currentUser = await User.findById(req.body.user._id);
-  console.log("??", currentUser);
 
   User.findByIdAndUpdate(
     currentUser,
@@ -57,29 +56,31 @@ router.put("/:userId/follow", isLoggedIn, async (req, res) => {
 });
 
 //unFollow the user
-router.put("/unFollow", isLoggedIn, async (req, res) => {
+router.put("/:userId/unFollow", isLoggedIn, async (req, res) => {
   const user = await User.findById(req.params.userId);
-  console.log("3", user);
+  console.log(">>>", user);
   const currentUser = await User.findById(req.body.user._id);
-  console.log("6", currentUser);
+  console.log("<<<", currentUser);
   User.findByIdAndUpdate(
-    user,
+    currentUser,
     {
-      $pull: { Followers: currentUser },
+      $pull: { Following: user },
     },
-    {
-      new: true,
-    },
+    { new: true },
+
     (err, result) => {
       if (err) {
         return res.status(500).json({ error: err });
       }
+
       User.findByIdAndUpdate(
-        currentUser,
+        user,
         {
-          $pull: { Following: user },
+          $pull: { Followers: currentUser },
         },
-        { new: true }
+        {
+          new: true,
+        }
       )
         .then((result) => {
           res.json(result);
