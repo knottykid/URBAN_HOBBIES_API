@@ -28,103 +28,46 @@ router.get("/:userId", isLoggedIn, async (req, res) => {
 //follow a user
 
 router.put("/:userId/follow", isLoggedIn, async (req, res) => {
-  const user = await User.findById(req.params.userId);
+  try {
+    const user = await User.findById(req.params.userId);
 
-  const currentUser = await User.findById(req.body.user._id);
+    const currentUser = await User.findById(req.body.user._id);
 
-  User.findByIdAndUpdate(
-    currentUser,
-    { $addToSet: { following: user } },
-    { new: true },
-    (err, result) => {
-      if (err) {
-        return res.status(500).json({ error: err });
-      }
-      User.findByIdAndUpdate(
-        user,
-        { $addToSet: { followers: currentUser } },
-        { new: true }
-      )
-        .then((response) => {
-          return res.json(response);
-        })
-        .catch((err) => {
-          return res.status(500).json({ error: err });
-        });
-    }
-  );
+    const follow = await User.findByIdAndUpdate(
+      currentUser,
+      { $addToSet: { following: user } },
+      { new: true }
+    );
+    await User.findByIdAndUpdate(user, {
+      $addToSet: { followers: currentUser },
+    });
+
+    return res.json(follow);
+  } catch (err) {
+    return res.status(500).json({ error: err });
+  }
 });
 
 //unFollow the user
 router.put("/:userId/unFollow", isLoggedIn, async (req, res) => {
-  const user = await User.findById(req.params.userId);
-  console.log(">>>", user);
-  const currentUser = await User.findById(req.body.user._id);
-  console.log("<<<", currentUser);
-  User.findByIdAndUpdate(
-    currentUser,
-    {
-      $pull: { Following: user },
-    },
-    { new: true },
+  try {
+    const user = await User.findById(req.params.userId);
 
-    (err, result) => {
-      if (err) {
-        return res.status(500).json({ error: err });
-      }
+    const currentUser = await User.findById(req.body.user._id);
 
-      User.findByIdAndUpdate(
-        user,
-        {
-          $pull: { Followers: currentUser },
-        },
-        {
-          new: true,
-        }
-      )
-        .then((result) => {
-          res.json(result);
-        })
-        .catch((err) => {
-          return res.status(500).json({ error: err });
-        });
-    }
-  );
+    const follow = await User.findByIdAndUpdate(
+      currentUser,
+      { $pull: { following: user } },
+      { new: true }
+    );
+    await User.findByIdAndUpdate(user, {
+      $pull: { followers: currentUser },
+    });
+
+    return res.json(follow);
+  } catch (err) {
+    return res.status(500).json({ error: err });
+  }
 });
-
-// router.put("/:userId/unFollow", async (req, res) => {
-//   try {
-//     const user = await User.findById(req.params.userId);
-//     const currentUser = await User.findById(req.body.user._id);
-//     console.log("YES", user);
-//     console.log("NO", currentUser);
-//     if (currentUser.followers > 0) {
-//       User.findByIdAndUpdate(
-//         user,
-//         { $pull: { followers: currentUser } },
-//         { new: true }
-//       ).then((u) => {
-//         console.log("Como Te LLAMAs?", u);
-//         return res.json(u);
-//       });
-//     }
-//     if (user.following > 0) {
-//       User.findByIdAndUpdate(
-//         currentUser,
-//         { $pull: { following: user } },
-//         { new: true }
-//       ).then((e) => {
-//         console.log("Quien ERES?", e);
-//         return res.json(e);
-//       });
-//     }
-//     // return res.status(200).json("user has been unFollowed");
-//     // } else {
-//     //   res.status(403).json("you don't follow this user");
-//     // }
-//   } catch (err) {
-//     res.status(500).json(err);
-//   }
-// });
 
 module.exports = router;
